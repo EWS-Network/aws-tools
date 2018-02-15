@@ -1,0 +1,14 @@
+
+- name: Download the package
+  get_url:
+    url: https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
+    dest: /opt/ssmagent.deb
+  become: yes
+
+
+- name: Install SSM Agent
+  apt:
+    deb: /opt/ssmagent.deb
+    state: present
+  become: yes
+

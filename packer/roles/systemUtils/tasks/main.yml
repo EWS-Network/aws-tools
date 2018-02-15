@@ -1,0 +1,103 @@
+
+- name: Install pip
+  apt:
+    name: python-pip
+    state: latest
+  become: yes
+  when:
+    - ansible_pkg_mgr == 'apt'
+
+- name: Install pip
+  yum:
+    name: python-pip
+    state: latest
+  become: yes
+  when:
+    - ansible_pkg_mgr == 'yum'
+
+
+- name: Install pip applications
+  pip:
+    name: "{{ item }}"
+  with_items:
+    - "boto3"
+    - "awscli"
+  become: yes
+
+- name: Install the basic tooling
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - "htop"
+    - "tmux"
+    - "emacs24-nox"
+    - "git"
+    - "tcpdump"
+  become: yes
+  when:
+    - ansible_pkg_mgr == 'apt'
+
+- name: Install the basic tooling
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "htop"
+    - "tmux"
+    - "emacs-nox"
+    - "git"
+    - "tcpdump"
+  become: yes
+  when:
+    - ansible_pkg_mgr == 'yum'
+
+- name: Install AWS Cloudformation Tools
+  script: aws_tools.sh
+  become: yes
+
+
+- name: pull emacs config
+  git:
+    repo: https://github.com/johnpreston/epitech-config
+    dest: /tmp/epitech-config
+  become: yes
+
+
+- name: Copy emacs config files to hom
+  shell: |
+    cp -r /tmp/epitech-config/.emacs* /home/ubuntu/
+    chown ubuntu:ubuntu -R /home/ubuntu/.emacs*
+    cp -r /tmp/epitech-config/.emacs* /root
+  become: yes
+  when:
+    - ansible_pkg_mgr == 'apt'
+
+- name: Copy emacs config files to hom
+  shell: |
+    cp -r /tmp/epitech-config/.emacs* /home/ec2-user/
+    chown ec2-user:ec2-user -R /home/ec2-user/.emacs*
+    cp -r /tmp/epitech-config/.emacs* /root
+  become: yes
+  when:
+    - ansible_pkg_mgr == 'yum'
+
+
+- name: Install Ansible via pip
+  pip:
+    name: ansible
+    version: 2.4.2
+  become: yes
+
+- name: Create the ansible configuration directory
+  file:
+    state: directory
+    path: /etc/ansible
+  become: yes
+  ignore_errors: yes
+
+- name: Download the latest ansible.cfg file from github
+  get_url:
+    url: https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg
+    dest: /etc/ansible/ansible.cfg
+  become: yes
+

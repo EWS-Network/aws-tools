@@ -1,0 +1,17 @@
+---
+# Main tasks for OS Cleanup
+
+- name: Remove all server SSH Keys
+  shell: |
+    find / -name "ssh_host*" -delete
+  become: yes
+
+- name: Clean all log files in /var/log
+  shell: |
+    for file in `find /var/log -type f` ; do cat /dev/null > $file ; done
+  become: yes
+
+- name: Clean all SSH folders
+  shell: |
+    find / -name authorized_keys -type f -delete
+  become: yes

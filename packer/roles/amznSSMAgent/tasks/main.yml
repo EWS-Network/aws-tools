@@ -1,0 +1,8 @@
+---
+# Install SSM Agent
+
+- name: SSM Agent for Amazon
+  include_tasks: amazon.yml
+  when:
+    - ansible_pkg_mgr == 'yum' && ansible_os_family == 'amazon'
+

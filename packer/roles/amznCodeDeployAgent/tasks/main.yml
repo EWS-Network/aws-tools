@@ -1,0 +1,35 @@
+---
+# Install CodeDeploy agent
+
+- name: Ubuntu / Debian
+  include_tasks: apt.yml
+  when:
+    - ansible_pkg_mgr == 'apt'
+
+- name: Amazon Linux / CentOS / RH
+  include_tasks: yum.yml
+  when:
+    - ansible_pkg_mgr == 'yum'
+
+- name: Get the codedeploy installer
+  get_url:
+    url: |
+      http://aws-codedeploy-{{ ansible_ec2_placement_region }}.s3.amazonaws.com/latest/install
+    dest: /opt/install
+    mode: 0755
+  become: yes
+
+
+- name: Run the installer
+  shell: |
+    /opt/install auto
+  become: yes
+
+
+- name: Disable CodeDeploy service
+  service:
+    name: codedeploy-agent
+    enabled: false
+    state: stopped
+  become: yes
+

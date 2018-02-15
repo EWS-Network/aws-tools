@@ -1,0 +1,9 @@
+---
+# AWS Amazon Linux
+
+- name: Install the agent
+  yum:
+    name: https://s3-{{ ansible_ec2_placement_region }}.amazonaws.com/amazon-ssm-{{ ansible_ec2_placement_region }}/latest/linux_amd64/amazon-ssm-agent.rpm
+    state: present
+  become: yes
+

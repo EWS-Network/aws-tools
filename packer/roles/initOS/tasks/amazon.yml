@@ -1,0 +1,9 @@
+---
+# Amazon Linux tasks
+
+- name: upgrade all
+  yum:
+    name: '*'
+    state: latest
+  become: yes
+

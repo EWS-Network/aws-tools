@@ -1,0 +1,9 @@
+---
+# Ubuntu tasks
+
+- name: Upgrade all packages
+  apt:
+    upgrade: yes
+    update_cache: yes
+  become: yes
+

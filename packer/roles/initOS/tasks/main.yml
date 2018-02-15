@@ -1,0 +1,9 @@
+- name: Get facts
+  setup:
+
+- name: EC2 facts
+  ec2_metadata_facts:
+
+- name: Upgrade all OS packages
+  include_tasks: "{{ ansible_distribution|lower }}.yml"
+

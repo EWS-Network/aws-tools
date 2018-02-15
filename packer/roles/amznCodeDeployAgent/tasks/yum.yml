@@ -1,0 +1,7 @@
+---
+# Amazon Linux & CentOS/RH tasks
+
+- name: Install Ruby
+  yum:
+    name: ruby
+  become: yes
